@@ -1,6 +1,6 @@
 # Pustka teologii
 Autor: Richard Dawkins<br>
-Opublikowano w Free Inquiry, wiosna 1998 v18 n2 p6(1)
+Opublikowano we Free Inquiry, wiosna 1998 v18 n2 p6(1)
 
 Żałośnie obłudny edytorial w brytyjskim The Independent niedawno zachęcał do pogodzenia nauki (science) z "teologią". Stwierdzono w nim, że "ludzie chcą wiedzieć jak najwięcej o swoim pochodzeniu". Mam nadzieję, że chcą, ale co do diaska każe komuś myśleć, że teologia ma do powiedzenia cokolwiek sensownego w tym temacie?
 
@@ -10,4 +10,4 @@ To właśnie nauka i tylko nauka dała nam tę wiedzę i to, co więcej, w zadzi
 
 Co takiego teologia kiedykolwiek powiedziała, co przydałoby się komukolwiek? Kiedy teologia powiedziała cokolwiek, co byłoby bezsprzecznie prawdziwe i jednocześnie nieoczywiste? Słuchałem teologów, czytałem ich, debatowałem z nimi. Nigdy nie usłyszałem, by mówili cokolwiek choć trochę użytecznego, coś, co nie było ani banalnie oczywiste, ani całkowicie błędne. Gdyby wszystkie osiągnięcia naukowców jutro zniknęły, nie byłoby lekarzy, tylko szamani, zabrakłoby transportu szybszego od koni, komputerów, drukowanych książek, rolnictwa poza tym chłopskim. A gdyby zniknęły wszystkie osiągnięcia teologów, czy ktokolwiek zauważyłby najmniejszą różnicę? Nawet złe osiągnięcia nauki, bomby i naprowadzane sonarem statki wielorybnicze, działają! Osiągnięcia teologów nie robią niczego, nie wpływają na nic, nic nie znaczą. Skąd w ogóle pomysł, że "teologia" jest dziedziną wiedzy?
 
-źródło: https://web.archive.org/web/20080804102908/http://www.simonyi.ox.ac.uk/dawkins/WorldOfDawkins-archive/Dawkins/Work/Articles/emptiness_of_theology.shtml
+źródło: <https://web.archive.org/web/20080804102908/http://www.simonyi.ox.ac.uk/dawkins/WorldOfDawkins-archive/Dawkins/Work/Articles/emptiness_of_theology.shtml>
