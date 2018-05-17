@@ -142,7 +142,10 @@ fmap (+3) (+1)
 
 Tu funkcja:
 
-![](images/fmap_list.png)
+![](images/function_with_value.png)
+
+1. Bierze wartość.
+2. Zwraca wartość.
 
 A tu funkcja wywołana z funkcją jako argumentem:
 
