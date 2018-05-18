@@ -21,13 +21,13 @@ Teraz wywołując funkcję otrzymamy różne wyniki **w zależności od kontekst
 
 Za chwilę zorientujemy się jak różny jest wynik wywołania w zależności od tego, czy argumentem jest `Just a` czy `Nothing`. Jednak najpierw wspomnijmy o funktorach.
 
-## `Functor`y
+## Funktory
 
 Gdy wartość jest zapakowana w kontekst, nie można na niej wykonać normalnej funkcji:
 
 ![](images/no_fmap_ouch.png)
 
-W takim przypadku przydaje się `fmap`, bo jest na bieżąco z kontekstami. `fmap` wie, jak wywoływać funkcje na argumentach opaktowanych w kontekst. Dla przykładu żałóżmy, że chcemy wywołać `(+3)` na `Just 2`. Korzystając z `fmap`:
+W takim przypadku przydaje się `fmap`, bo jest na bieżąco z kontekstami. `fmap` wie, jak wywoływać funkcje na argumentach opakowanych w kontekst. Dla przykładu żałóżmy, że chcemy wywołać `(+3)` na `Just 2`. Korzystając z `fmap`:
 ```haskell
 > fmap (+3) (Just 2)
 Just 5
@@ -168,5 +168,77 @@ instance Functor ((->) r) where
 ```
 
 Używając `fmap` na funkcji, tak naprawdę po prostu komponujesz funkcje!
+
+## Funktory aplikatywne
+
+Funktory aplikatywne (`Applicative`) wchodzą na nieco wyższy poziom. Podobnie jak ze zwyczajnymi funktorami (`Functor`), nasze wartości są opakowane w kontekst:
+
+![](images/value_and_context.png)
+
+Jednak także nasze funkcje także są opakowane w kontekst!
+
+![](images/function_and_context.png)
+
+Tak, niech to zapadnie w pamięć. Funktory aplikatywne się nie patyczkują. `Control.Applicative` definiuje `<*>`, który wie, jak zastosować opakowaną w kontekst funkcję do zapakowanej wartości:
+
+![](images/applicative_just.png)
+
+1. Funckja opakowana w kontekst.
+2. Wartość w kontekście.
+3. Odpakuj obie i zastosuj funkcję do wartości.
+4. Nowa wartość w kontekście.
+
+To jest:
+
+```haskell
+Just (+3) <*> Just 2 == Just 5
+```
+
+Użycie `<*>` może doprowadzić do interesujących sytuacji, np.:
+
+```haskell
+> [(*2), (+3)] <*> [1, 2, 3]
+[2, 4, 6, 4, 5, 6]
+```
+
+![](images/applicative_list.png)
+
+A teraz coś, czego nie można zrobić zwykłym funktorem, ale można funktorem aplikatywnym. Jak wykonać funkcję dwóch zmiennych na dwóch zapakowanych wartościach?
+
+```haskell
+> (+) <$> (Just 5)
+Just (+5)
+> Just (+5) <$> (Just 4)
+ERROR ??? CO TO W OGÓLE MA ZNACZYĆ CZEMU FUNKCJA JEST ZAPAKOWANA W JUST
+```
+
+Funktor aplikatywny:
+
+```haskell
+> (+) <$> (Just 5)
+Just (+5)
+> Just (+5) <*> (Just 3)
+Just 8
+```
+
+`Applicative` odsuwa `Functor` na bok. "Duzi chłopcy mogą używać funkcji z dowolną liczbą argumentów" – mówi. "Uzbrojony w `<$>` i `<*>` mogę wziąć dowolną funkcję oczekującą dowolną liczbę nieopakowanych wartości. Przekazuję jej wszystkie wartości zapakowane i otrzymuję zapakowany wynik! AHAHAHAHAH!"
+
+```haskell
+> (*) <$> Just 5 <*> Just 3
+Just 15
+```
+
+Jest też funkcja nazwana `liftA2`, która robi dokładnie to samo:
+
+```haskell
+> liftA2 (*) (Just 5) (Just 3)
+Just 15
+```
+
+## Monady
+
+Jak nauczyć się o monadach:
+1. Zrób doktorat z informatyki.
+2. Wyrzuć go do śmieci, bo nie będzie potrzebny w tej sekcji!
 
 (c.d.n.)
