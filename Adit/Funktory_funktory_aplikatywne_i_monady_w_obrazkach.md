@@ -241,4 +241,171 @@ Jak nauczyć się o monadach:
 1. Zrób doktorat z informatyki.
 2. Wyrzuć go do śmieci, bo nie będzie potrzebny w tej sekcji!
 
-(c.d.n.)
+Monady dodają coś jeszcze.
+
+Funktory wykonują funkcję na opakowanej wartości:
+
+![](images/fmap.png)
+
+Funktory aplikatywne wykonują opakowaną funkcję na opakowanej wartości:
+
+![](images/applicative.png)
+
+Monady wykonują funkcję, **która zwraca opakowaną wartość** na opakowanej wartości. Monady mają w tym celu funkcję `>>=` (czyt. "bind").
+
+Zobaczmy przykład. Znane nam `Maybe` jest monadą:
+
+![](images/context.png)
+
+Przyjmijmy, że `half` jest funkcją działającą tylko na liczbach parzystych:
+
+```haskell
+half x = if even x
+           then Just (x `div` 2)
+           else Nothing
+```
+
+![](images/half.png)
+
+1. Bierze wartość.
+2. Zwraca zapakowaną wartość.
+
+Co gdybyśmy podali jej zapakowaną wartość?
+
+![](images/half_ouch.png)
+
+Musimy użyć `>>=`, żeby wepchnąć naszą zapakowaną wartość do tej funkcji. Oto zdjęcie `>>=`:
+
+![](images/plunger.jpg)
+
+A oto jak działa:
+
+```haskell
+> Just 3 >>= half
+Nothing
+> Just 4 >>= half
+Just 2
+> Nothing >>= half
+Nothing
+```
+
+Co dzieje się w środku? `Monad` (monada) jest kolejną typeklasą. Oto część jej definicji:
+
+```haskell
+class Monad m where
+    (>>=) :: m a -> (a -> m b) -> m b
+```
+
+Gdzie `>>=` to:
+
+![](images/bind_def.png)
+
+1. `>>=` bierze monadę (jak `Just 3`)
+2. i funkcję, która zwraca monadę (jak `half`)
+3. i zwraca monadę.
+
+Więc `Maybe` jest monadą:
+
+```haskell
+instance Monad Maybe where
+    Nothing >>= func = Nothing
+    Just val >>= func  = func val
+```
+
+A tutaj w akcji z `Just 3`!
+
+![](images/monad_just.png)
+
+1. `>>=` (czyt. "bind") odpakowuje wartość,
+2. podaje odpakowaną wartość do funkcji,
+3. wychodzi zapakowana wartość.
+
+A gdy przkażesz na wejściu `Nothing`, jest jeszcze prościej:
+
+![](images/monad_nothing.png)
+
+1. Nic (nie) wchodzi,
+2. nic nie jest robione,
+3. nic (nie) wychodzi.
+
+Wywołania można też połączyć w łańcuch:
+
+```haskell
+> Just 20 >>= half >>= half >>= half
+Nothing
+```
+
+![](images/monad_chain.png)
+
+![](images/whoa.png)
+
+Nieźle! Już wiemy, że `Maybe` jest `Functor`em, `Applicative`m i `Monad`ą. Teraz przejdźmy do innego przykładu: monady `IO`:
+
+![](images/io.png)
+
+Skupimy się na trzech funkcjach. `getLine` nie bierze żadnych argumentów i pobiera wejście od użytkownika:
+
+![](images/getLine.png)
+
+```haskell
+getLine :: IO String
+```
+
+`readFile` bierze ciąg znaków (nazwę pliku) i zwraca zawartość pliku:
+
+![](images/readFile.png)
+
+```haskell
+readFile :: FilePath -> IO String
+```
+
+`putStrLn` bierze ciąg znaków i wypisuje go:
+
+![](images/putStrLn.png)
+
+```haskell
+putStrLn :: String -> IO ()
+```
+
+Wszystkie te trzy funkcje biorą zwyczajną wartość (bądź żadną) i zwracają opakowaną wartość. Możemy wywołać je wszystkie w łańcuchu korzystając z `>>=`!
+
+![](images/monad_io.png)
+
+```haskell
+getLine >>= readFile >>= putStrLn
+```
+
+1. Pobierz wejście od użytkownika.
+2. Użyj go do otwarcia pliku.
+3. Wypisz zawartość pliku.
+
+O, tak! Pierwszy rząd na występach monad!
+
+Haskell dostarcza także cukier składniowy do operacji na monadach, zwany *`do` notation*, notacją `do`:
+
+```haskell
+foo = do
+    filename <- getLine
+    contents <- readFile filename
+    putStrLn contents
+```
+
+## Podsumowanie
+
+1. Funktor jest typem danych implementującym typeklasę `Functor`.
+2. Funktor aplikatywny jest typem danych implementującym typeklasę `Applicative`.
+3. Monada jest typem danych implementującym typeklasę `Monad`.
+4. `Maybe` implementuje wszystkie te trzy, jest więc funktorem, funktorem aplikatywnym i monadą.
+
+Jakie są między nimi różnice?
+
+![](images/recap.png)
+
+* **Funktory**: wykonujesz funkcję na opakowanej wartości używając `fmap` bądź `<$>`.
+* **Funktory aplikatywne**: wykonujesz opakowaną funkcję na opakowanej wartości używając `<*>` bądź `liftA`.
+* **Monady**: wykonujesz funkcję zwracającą opakowaną wartość na opakowanej wartości używając `>>=` bądź `liftM`.
+
+Więc, drogi kumplu (myślę, że na tym etapie jesteśmy już kumplami), myślę, że zgodzimy się oboje, że monady są łatwe i że są DOBRYM POMYSŁEM™. Skoro już napociłeś się czytając ten przewodnik, czemu by nie pójść na całość? Przejrzyj [rozdział o monadach](http://learnyouahaskell.com/a-fistful-of-monads) w Learn You A Haskell (ang). Jest wiele rzeczy, które pominąłem, bo Miran świetnie wgłębia się w ten temat.
+
+---
+Od tłumacza: a jeśli masz jeszcze chwilkę, może zainteresują Cię [moje projekty](https://hckr.pl/). ☺
